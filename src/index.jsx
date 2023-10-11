@@ -73,12 +73,19 @@ function Menu() {
   return (
     <main className="menu">
       <h2>Our menu</h2>
+
       {numPizzas > 0 ? (
-        <ul className="pizzas">
-          {pizzaData.map((pizza) => (
-            <Pizza {...pizza} key={pizza.name} />
-          ))}
-        </ul>
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzaData.map((pizza) => (
+              <Pizza {...pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
       ) : (
         <p>We're still working on our menu. Please come back later :)</p>
       )}
@@ -95,10 +102,7 @@ function Footer() {
   return (
     <footer className="footer">
       {isOpen ? (
-        <div className="order">
-          <p>We are open until {closeHour}.Come visit us or order online.</p>
-          <button className="btn">Order</button>
-        </div>
+        <Order closeHour={closeHour} />
       ) : (
         <p>
           We're happy to welcome you between {openHour} and {closeHour}
@@ -112,14 +116,23 @@ function Footer() {
 function Pizza(props) {
   console.dir(props);
   return (
-    <li className="pizza">
+    <li className={`pizza ${props.soldOut ? "sold-out" : ""}`}>
       <img src={props.photoName} alt={props.name} />
       <div>
         <h3>{props.name}</h3>
         <p>{props.ingredients}</p>
-        <span>{props.price + 3}</span>
+        {props.soldOut ? <span>SOLD OUT</span> : <span>{props.price}</span>}
       </div>
     </li>
+  );
+}
+
+function Order({ closeHour }) {
+  return (
+    <div className="order">
+      <p>We are open until {closeHour}.Come visit us or order online.</p>
+      <button className="btn">Order</button>
+    </div>
   );
 }
 
